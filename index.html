@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Routing</title>
+    <meta name="viewport" content="initial-scale=1.0,width=device-width" />
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core-legacy.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service-legacy.js" type="text/javascript" charset="utf-8"></script>
+    <!-- for interactive map  -->
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+    <!-- for StreetLevel -->
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+</head>
+
+<body>
+    <div id='maps' style="width: 100%;height:550px"></div>
+    <script type="text/javascript" charset="utf-8">
+    var platform = new H.service.Platform({
+        'apikey': '97jX-h4M8xWR3EQa94nfFzJXXTDJDBUZZMW411JISW4'
+    });
+
+    // Obtain the default map types from the platform object:
+    var defaultLayers = platform.createDefaultLayers({ lg: 'CHT' });
+
+    // Instantiate (and display) a map object:
+    var map = new H.Map(
+        document.getElementById('maps'),
+        defaultLayers.vector.normal.map, {
+            zoom: 14,
+            center: {
+                lat: 25.0339,
+                lng: 121.5647
+            }
+        });
+
+
+    // // 'maptypes' variable holds the result of the H.service.Platform#createDefaultLayers call
+    // var mapSettings = new H.ui.MapSettingsControl({
+    //     alignment: 'top-right',
+    //     baseLayers: [{
+    //         label: 'Normal map',
+    //         layer: maptypes.raster.normal.map
+    //     }]
+    // });
+    // ui.addControl('mapsettings', mapSettings);
+
+
+    // // Provided that map is instantiated and there are some markers
+    // // on the map that must be inspected.
+    // map.getObjectAt(0, 0, (obj) => {
+    //     if (obj && obj instanceof H.map.Marker) {
+    //         console.log(obj.getGeometry());
+    //     }
+    // });
+
+
+    // // Provided that the map, UI and mapevents behavior are instantiated
+
+    // // disable fractional zooming for Behavior
+    // behavior.disable(H.mapevents.Behavior.Feature.FRACTIONAL_ZOOM);
+
+    // // instantiate H.ui.ZoomControl with the disabled fractional zooming
+    // // and add it to the UI
+    // var zoomControl = new H.ui.ZoomControl({ fractionalZoom: false });
+    // ui.addControl('zoom', zoomControl);
+
+
+
+
+
+    // Enable the event system on the map instance:
+    var mapEvents = new H.mapevents.MapEvents(map);
+
+    // Add event listener:
+    map.addEventListener('tap', function(evt) {
+        // Log 'tap' and 'mouse' events:
+        console.log(evt.type, evt.currentPointer.type);
+    });
+
+    // Instantiate the default behavior, providing the mapEvents object:
+    var behavior = new H.mapevents.Behavior(mapEvents);
+
+
+
+    // Create the default UI:
+    var ui = H.ui.UI.createDefault(map, defaultLayers, 'zh-CN');
+
+    // var platform = new H.service.Platform({
+    //     'app_id': 'OpnOeeAkAALSVSlPWcsf',
+    //     'app_code': '_Bi6G3bqymSbOGwt2YYM2g'
+
+    // });
+
+
+// Create an info bubble object at a specific geographic location:
+var bubble = new H.ui.InfoBubble({ lng: 121.5147,lat: 25.1339, }, {
+                content: '<b>Hello World!</b>'
+             });
+
+// Add info bubble to the UI:
+ui.addBubble(bubble);
+
+
+
+// Define a variable holding SVG mark-up that defines an icon image:
+var svgMarkup = '<svg width="24" height="24" ' +
+    'xmlns="http://www.w3.org/2000/svg">' +
+    '<rect stroke="white" fill="#1b468d" x="1" y="1" width="22" ' +
+    'height="22" /><text x="12" y="18" font-size="12pt" ' +
+    'font-family="Arial" font-weight="bold" text-anchor="middle" ' +
+    'fill="white">H</text></svg>';
+
+// Create an icon, an object holding the latitude and longitude, and a marker:
+var icon = new H.map.Icon(svgMarkup),
+    coords = {lat: 25.0339, lng: 121.5647},
+    marker = new H.map.Marker(coords, {icon: icon});
+
+// Add the marker to the map and center the map at the location of the marker:
+map.addObject(marker);
+map.setCenter(coords);
+
+
+
+// Create a marker icon from an image URL:
+var icon = new H.map.Icon('walker.png');
+
+// Create a marker using the previously instantiated icon:
+var marker = new H.map.Marker({ lat: 25.1339, lng: 121.5947 }, { icon: icon });
+
+// Add the marker to the map:
+map.addObject(marker);
+
+    // // Obtain the default map types from the platform object:
+    // var defaultLayers = platform.createDefaultLayers({ lg: 'CHT' });
+    // // Instantiate (and display) a map object:
+    // var map = new H.Map(
+    //     document.getElementById('maps'),
+    //     /*(定義基本的呈現) default the lays*/
+    //     defaultLayers.normal.map, {
+    //         zoom: 16,
+    //         center: {
+    //             lat: 25.0339,
+    //             lng: 121.5647
+    //         }
+    //     });
+
+    // //使地圖能pan / drag ; create the listener for map interactive
+    // // Enable the event system on the map instance:
+    // var mapEvents = new H.mapevents.MapEvents(map);
+    // // Add event listener:
+    // map.addEventListener('tap', function(evt) {
+    //     // Log 'tap' and 'mouse' events:
+    //     console.log(evt.type, evt.currentPointer.type);
+    // });
+
+    // // Instantiate the default behavior, providing the mapEvents object: 
+    // var behavior = new H.mapevents.Behavior(mapEvents);
+
+    // // Create the default UI: 
+    // var ui = H.ui.UI.createDefault(map, defaultLayers, 'zh-CN');
+    // /*
+    // //remove the StreetLevel Control in default UI ; 移除UI的物件
+    // ui.getControl('panorama').setEnabled(false)
+    // */
+
+
+
+    // //展示routing 的路線:
+    // // Displaying a Route on the Map :
+    // // Create the parameters for the routing request:
+    // var routingParameters = {
+    //     // The routing mode: mode=shortest;pedestrian ; mode=fastest;car;traffic:enabled ; mode=fastest;car;traffic:disabled ; fastest;bicycle  ; pedestrian
+    //     //'mode': 'fastest;car;traffic:enabled;motorway:-3', 'fastest;scooter'
+    //     'mode': 'fastest;scooter;traffic:enabled',
+    //     //https://developer.here.com/documentation/routing/topics/resource-param-type-routing-mode.html#resource-param-type-routing-mode__type-transport-mode
+
+    //     // The start point of the route:
+    //     'waypoint0': 'geo!25.048761677,121.51335557928074',
+    //     // The end point of the route:
+    //     'waypoint1': 'geo!25.0451800000,121.572095',
+    //     //'waypoint1': 'geo!24.04978,120.69414',
+    //     // To retrieve the shape of the route we choose the route
+    //     // representation mode 'display'
+    //     'representation': 'display'
+    // };
+
+    // //purple LINE
+    // var routingParameters2 = {
+    //     // The routing mode: mode=shortest;pedestrian ; mode=fastest;car;traffic:enabled ; mode=fastest;car;traffic:disabled ; fastest;bicycle  ; pedestrian
+    //     //'mode': 'fastest;car;traffic:enabled;motorway:-3',
+    //     'mode': 'fastest;bicycle;traffic:disabled',
+    //     // The start point of the route:
+    //     'waypoint0': 'geo!25.03398,121.55768',
+    //     // The end point of the route:
+    //     'waypoint1': 'geo!25.115836,121.471177',
+    //     //'waypoint1': 'geo!24.04978,120.69414',
+    //     // To retrieve the shape of the route we choose the route
+    //     // representation mode 'display'
+    //     'representation': 'display'
+    // };
+
+
+
+    // // Define a callback function to process the routing response:
+    // var onResult = function(result) {
+    //     var route,
+    //         routeShape,
+    //         startPoint,
+    //         endPoint,
+    //         linestring;
+    //     if (result.response.route) {
+    //         // Pick the first route from the response:
+    //         route = result.response.route[0];
+    //         // Pick the route's shape:
+    //         routeShape = route.shape;
+
+    //         // Create a linestring to use as a point source for the route line
+    //         linestring = new H.geo.LineString();
+
+    //         // Push all the points in the shape into the linestring:
+    //         routeShape.forEach(function(point) {
+    //             var parts = point.split(',');
+    //             linestring.pushLatLngAlt(parts[0], parts[1]);
+    //         });
+
+    //         // Retrieve the mapped positions of the requested waypoints:
+    //         startPoint = route.waypoint[0].mappedPosition;
+    //         endPoint = route.waypoint[1].mappedPosition;
+
+    //         // Create a polyline to display the route:
+    //         var routeLine = new H.map.Polyline(linestring, {
+    //             style: { strokeColor: 'blue', lineWidth: 5 }
+    //         });
+
+    //         // Create a marker for the start point:
+    //         var startMarker = new H.map.Marker({
+    //             lat: startPoint.latitude,
+    //             lng: startPoint.longitude
+    //         });
+
+    //         // Create a marker for the end point:
+    //         var endMarker = new H.map.Marker({
+    //             lat: endPoint.latitude,
+    //             lng: endPoint.longitude
+    //         });
+
+    //         // Create a polyline to display the route ; 增加箭頭arrow到路徑中表現
+    //         routeLine = new H.map.Polyline(linestring, {
+    //             style: { lineWidth: 10 },
+    //             arrows: { fillColor: 'white', frequency: 2, width: 0.8, length: 0.7 }
+    //         });
+
+    //         // Add the route polyline and the two markers to the map:
+    //         map.addObjects([routeLine, startMarker, endMarker]);
+
+    //         // Set the map's viewport to make the whole route visible:
+    //         map.setViewBounds(routeLine.getBounds());
+
+
+    //     }
+
+    // };
+
+
+    // // Define a callback function to process the routing response:
+    // var onResult2 = function(result) {
+    //     var route,
+    //         routeShape,
+    //         startPoint,
+    //         endPoint,
+    //         linestring;
+    //     if (result.response.route) {
+    //         // Pick the first route from the response:
+    //         route = result.response.route[0];
+    //         // Pick the route's shape:
+    //         routeShape = route.shape;
+
+    //         // Create a linestring to use as a point source for the route line
+    //         linestring = new H.geo.LineString();
+
+    //         // Push all the points in the shape into the linestring:
+    //         routeShape.forEach(function(point) {
+    //             var parts = point.split(',');
+    //             linestring.pushLatLngAlt(parts[0], parts[1]);
+    //         });
+
+    //         // Retrieve the mapped positions of the requested waypoints:
+    //         startPoint = route.waypoint[0].mappedPosition;
+    //         endPoint = route.waypoint[1].mappedPosition;
+
+    //         // Create a polyline to display the route:
+    //         var routeLine = new H.map.Polyline(linestring, {
+    //             style: { strokeColor: 'purple', lineWidth: 3 }
+    //         });
+
+    //         // Create a marker for the start point:
+    //         var startMarker = new H.map.Marker({
+    //             lat: startPoint.latitude,
+    //             lng: startPoint.longitude
+    //         });
+
+    //         // Create a marker for the end point:
+    //         var endMarker = new H.map.Marker({
+    //             lat: endPoint.latitude,
+    //             lng: endPoint.longitude
+    //         });
+
+    //         // // Create a polyline to display the route ; 增加箭頭arrow到路徑中表現
+    //         // routeLine = new H.map.Polyline(linestring, {
+    //         //     style: { lineWidth: 10 },
+    //         //     arrows: { fillColor: 'white', frequency: 2, width: 0.8, length: 0.7 }
+    //         // });
+
+    //         // Add the route polyline and the two markers to the map:
+    //         map.addObjects([routeLine, startMarker, endMarker]);
+
+    //         // Set the map's viewport to make the whole route visible:
+    //         map.setViewBounds(routeLine.getBounds());
+
+
+    //     }
+
+    // };
+
+    // // Get an instance of the routing service:
+    // var router = platform.getRoutingService();
+
+    // // Call calculateRoute() with the routing parameters,
+    // // the callback and an error callback function (called if a
+    // // communication error occurs):
+    // router.calculateRoute(routingParameters, onResult,
+    //     function(error) {
+    //         alert(error.message);
+    //     });
+
+    // router.calculateRoute(routingParameters2, onResult2,
+    //     function(error) {
+    //         alert(error.message);
+    //     });
+
+
+
+
+
+
+    // // Isoline Routing : by time 
+    // //pedestrian ,  ;motorway:-3 (https://developer.here.com/documentation/routing/topics/resource-param-type-routing-mode.html#type-route-feature-weight)
+    // var routingTimeParams = {
+    //     'mode': 'fastest;pedestrian;traffic:enabled',
+    //     'start': 'geo!25.0228,121.50472',
+    //     'range': '1200',
+    //     'rangetype': 'time'
+    // };
+
+
+
+    // // Define a callback function to process the isoline response.
+    // var onResult = function(result) {
+    //     var center = new H.geo.Point(
+    //             result.response.center.latitude,
+    //             result.response.center.longitude),
+    //         isolineCoords = result.response.isoline[0].component[0].shape,
+    //         linestring = new H.geo.LineString(),
+    //         isolinePolygon,
+    //         isolineCenter;
+
+    //     // Add the returned isoline coordinates to a linestring:
+    //     isolineCoords.forEach(function(coords) {
+    //         linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+    //     });
+
+    //     // Create a polygon and a marker representing the isoline:
+    //     isolinePolygon = new H.map.Polygon(linestring, {
+    //         style: { strokeColor: 'blue', lineWidth: 1, fillColor: 'rgba(2127, 0, 255, 0.3)' } //粉色
+    //     });
+    //     var locationIcon = new H.map.Icon('walker.png'),
+    //         locationMarker = new H.map.Marker(center, { icon: locationIcon });
+    //     //isolineCenter = new H.map.Marker(center);
+
+    //     // Add the polygon and marker to the map:
+    //     map.addObjects([locationMarker, isolinePolygon]);
+
+    //     // Center and zoom the map so that the whole isoline polygon is
+    //     // in the viewport:
+    //     map.setViewBounds(isolinePolygon.getBounds());
+    // };
+
+    // // Get an instance of the routing service:
+    // var router = platform.getRoutingService();
+
+    // // Call the Routing API to calculate an isoline:
+    // router.calculateIsoline(
+    //     routingTimeParams,
+    //     onResult,
+    //     function(error) {
+    //         alert(error.message);
+    //     }
+    // );
+
+
+
+    // // Isoline Routing : by distance
+
+    // var routingDistacneParams = {
+    //     'mode': 'fastest;pedestrian;traffic:enabled',
+    //     'start': 'geo!25.0228,121.50472',
+    //     'range': '2000',
+    //     'rangetype': 'distance'
+    // };
+
+    // // Define a callback function to process the isoline response.
+    // var onResult1 = function(result) {
+    //     var center = new H.geo.Point(
+    //             result.response.center.latitude,
+    //             result.response.center.longitude),
+    //         isolineCoords = result.response.isoline[0].component[0].shape,
+    //         linestring = new H.geo.LineString(),
+    //         isolinePolygon,
+    //         isolineCenter;
+
+    //     // Add the returned isoline coordinates to a linestring:
+    //     isolineCoords.forEach(function(coords) {
+    //         linestring.pushLatLngAlt.apply(linestring, coords.split(','));
+    //     });
+
+    //     // Create a polygon and a marker representing the isoline:
+    //     isolinePolygon = new H.map.Polygon(linestring, {
+    //         style: { strokeColor: 'blue', lineWidth: 1, fillColor: 'rgba(61, 255, 68, 0.3)' } //綠色
+    //     });
+    //     var locationIcon = new H.map.Icon('walker.png'),
+    //         isolineCenter = new H.map.Marker(center, { icon: locationIcon });
+    //     //isolineCenter = new H.map.Marker(center);
+
+    //     // Add the polygon and marker to the map:
+    //     map.addObjects([isolineCenter, isolinePolygon]);
+
+    //     // Center and zoom the map so that the whole isoline polygon is
+    //     // in the viewport:
+    //     map.setViewBounds(isolinePolygon.getBounds());
+    // };
+
+    // router.calculateIsoline(
+    //     routingDistacneParams,
+    //     onResult1,
+    //     function(error) {
+    //         alert(error.message);
+    //     }
+    // );
+    </script>
+</body>
+
+</html>
