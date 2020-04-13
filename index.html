@@ -35,6 +35,9 @@
                 lng: 121.5647
             }
         });
+        
+        // add a resize listener to make sure that the map occupies the whole container
+    window.addEventListener('resize', () => map.getViewPort().resize());
 
 
     // // 'maptypes' variable holds the result of the H.service.Platform#createDefaultLayers call
